@@ -2,11 +2,11 @@ import { Fragment, useContext, useEffect } from 'react'
 import Head from 'next/head'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
-import { AuthContext } from './contexts/AuthContext'
-import { api } from './services/api'
-import { getAPIClient } from './services/axios'
-import { GetServerSideProps } from 'next'
 import { parseCookies } from 'nookies'
+import { AuthContext } from '../contexts/AuthContext'
+import { api } from '../services/api'
+import { GetServerSideProps } from 'next'
+import { getAPIClient } from '../services/axios'
 
 const navigation = ['Dashboard', 'Team', 'Projects', 'Calendar', 'Reports']
 const profile = ['Your Profile', 'Settings']
@@ -16,11 +16,11 @@ function classNames(...classes) {
 }
 
 export default function Dashboard() {
-  const { user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext)
 
-  // useEffect(() => {
-  //   api.get('/users')
-  // }, []);
+  useEffect(() => {
+    // api.get('/users');
+  }, [])
 
   return (
     <div>
@@ -225,7 +225,7 @@ export default function Dashboard() {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const apiClient = getAPIClient(ctx);
-  const { ['nextauth.token']: token } = parseCookies(ctx);
+  const { ['nextauth.token']: token } = parseCookies(ctx)
 
   if (!token) {
     return {
@@ -236,9 +236,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
   }
 
-  const user = await apiClient.get('/users');
-
-  console.log(user)
+  await apiClient.get('/users')
 
   return {
     props: {}
